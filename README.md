@@ -1,2 +1,3 @@
 # Lunabotics
-Official NASA Lunabotics GitHub repository for the CMU Lunabotics team.
+
+The official NASA Lunabotics GitHub repository for CMU Lunabotics.
