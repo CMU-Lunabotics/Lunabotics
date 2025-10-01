@@ -1,0 +1,58 @@
+# Docker Compose file for TurtleBot3 Behavior Examples
+#
+# Usage:
+#
+# To build the images:
+#   docker compose build
+#
+# To start up a specific service by name:
+#   docker compose up <service_name>
+#
+# To open an interactive shell to a running container:
+#   docker exec -it <container_name> bash
+
+version: "3.9"
+services:
+  # Base image containing dependencies.
+  base:
+    image: lunabotics:base
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        ROS_DISTRO: humble
+      target: base
+    # Interactive shell
+    stdin_open: true
+    tty: true
+    # Networking and IPC for ROS 2
+    network_mode: host
+    ipc: host
+    # Needed to display graphical applications (@TODO!!)
+  
+
+
+  # Developer container
+  dev:
+    extends: base
+    image: lunabotics:dev
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: dev
+      args:
+        - UID=${UID:-1000}
+        - GID=${UID:-1000}
+        - USERNAME=${USERNAME:-devuser}
+    volumes:
+      # Mount the source code
+      - ./tb3_autonomy:/overlay_ws/src/tb3_autonomy:rw
+      - ./tb3_worlds:/overlay_ws/src/tb3_worlds:rw
+      # Mount colcon build artifacts for faster rebuilds
+      - ./.colcon/build/:/overlay_ws/build/:rw
+      - ./.colcon/install/:/overlay_ws/install/:rw
+      - ./.colcon/log/:/overlay_ws/log/:rw
+    user: ${USERNAME:-devuser}
+    command: sleep infinity
+
+ 
