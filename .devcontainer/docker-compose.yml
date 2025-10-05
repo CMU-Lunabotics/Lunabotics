@@ -12,20 +12,13 @@ services:
     #   dockerfile: .devcontainer/Dockerfile
 
     volumes:
-      # Update this to wherever you want VS Code to mount the folder of your project
       - ..:/workspaces:cached
-      - /tmp/.X11-unix:/tmp/.X11-unix
 
     environment:
-      - DISPLAY=docker.for.mac.host.internal:0
-      # Force software rendering
-      - LIBGL_ALWAYS_INDIRECT=1
-      - LIBGL_ALWAYS_SOFTWARE=1
-      - GALLIUM_DRIVER=llvmpipe
-      # Disable GPU acceleration
-      - OGRE_RTT_MODE=Copy
-    user: ${USERNAME:-devuser}
-    network_mode: "host"
+      - DISPLAY=:1
+      
+    ports:
+      - "5901:5901"
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
     #   - SYS_PTRACE
