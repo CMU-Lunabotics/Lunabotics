@@ -30,8 +30,6 @@ services:
     ipc: host
     # Needed to display graphical applications (@TODO!!)
   
-
-
   # Developer container
   dev:
     extends: base
@@ -44,15 +42,5 @@ services:
         - UID=${UID:-1000}
         - GID=${UID:-1000}
         - USERNAME=${USERNAME:-devuser}
-    volumes:
-      # Mount the source code
-      - ./tb3_autonomy:/overlay_ws/src/tb3_autonomy:rw
-      - ./tb3_worlds:/overlay_ws/src/tb3_worlds:rw
-      # Mount colcon build artifacts for faster rebuilds
-      - ./.colcon/build/:/overlay_ws/build/:rw
-      - ./.colcon/install/:/overlay_ws/install/:rw
-      - ./.colcon/log/:/overlay_ws/log/:rw
     user: ${USERNAME:-devuser}
     command: sleep infinity
-
- 
