@@ -22,7 +22,8 @@ WORKDIR /lunabotics
 # Development Image #
 #####################
 FROM base AS dev
-ENV DISPLAY=:0
+ENV DISPLAY=:1
+# ENV DEBIAN_FRONTEND=noninteractive
 
 # Dev container arguments
 ARG USERNAME=devuser
@@ -39,6 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-$ROS_DISTRO-rviz2 \
     tigervnc-standalone-server \
     tigervnc-common \
+    tightvncserver \
     xfce4 \
     xfce4-goodies \
     dbus-x11 \
@@ -56,7 +58,26 @@ RUN groupadd --gid $GID $USERNAME \
 # Set the ownership of the overlay workspace to the new user
 RUN chown -R ${UID}:${GID} /lunabotics
 
+# Switch to user and setup VNC
+USER ${USERNAME}
+WORKDIR /home/${USERNAME}
+
+# Create VNC startup script
+RUN mkdir -p ~/.vnc && \
+    echo "#!/bin/bash" > ~/.vnc/xstartup && \
+    echo "unset SESSION_MANAGER" >> ~/.vnc/xstartup && \
+    echo "unset DBUS_SESSION_BUS_ADDRESS" >> ~/.vnc/xstartup && \
+    echo "exec startxfce4" >> ~/.vnc/xstartup && \
+    chmod +x ~/.vnc/xstartup
+
+# Set VNC password (change "password" to your desired password)
+RUN echo "password" | vncpasswd -f > ~/.vnc/passwd && \
+    chmod 600 ~/.vnc/passwd
+
 # Expose VNC port
 EXPOSE 5901
+
+
+WORKDIR /lunabotics
 
 ### SET UP DEVELOPMENT IMAGE ### 

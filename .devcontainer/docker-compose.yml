@@ -16,14 +16,15 @@ services:
 
     environment:
       - DISPLAY=:1
-      
+
     ports:
       - "5901:5901"
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
     #   - SYS_PTRACE
     # security_opt:
+
     #   - seccomp:unconfined
 
     # Overrides default command so things don't shut down after the process ends.
-    command: sleep infinity
+    command: /bin/bash -c "vncserver :1 -geometry 1920x1080 -depth 24 -localhost no && tail -f /dev/null" && sleep infinity

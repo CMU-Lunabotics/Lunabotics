@@ -29,8 +29,8 @@ services:
     network_mode: host
     ipc: host
     # Needed to display graphical applications (@TODO!!)
-  
-  # Developer container
+
+    # Developer container
   dev:
     extends: base
     image: lunabotics:dev
@@ -43,4 +43,8 @@ services:
         - GID=${UID:-1000}
         - USERNAME=${USERNAME:-devuser}
     user: ${USERNAME:-devuser}
-    command: sleep infinity
+    environment:
+      - DISPLAY=:1
+    ports:
+      - "5901:5901"
+    command: /bin/bash -c "vncserver :1 -geometry 1920x1080 -depth 24 -localhost no && tail -f /dev/null && sleep infinity"
