@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+<world name="NASA_field">
+
+    <plugin
+      filename="ignition-gazebo-physics-system"
+      name="ignition::gazebo::systems::Physics">
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-sensors-system"
+      name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-scene-broadcaster-system"
+      name="ignition::gazebo::systems::SceneBroadcaster">
+    </plugin>
+    <plugin
+      filename="ignition-gazebo-user-commands-system"
+      name="ignition::gazebo::systems::UserCommands">
+    </plugin>
+
+
+    
+    <include>
+      <uri>package://gazebo/ros_gz_description/models/NASA_field</uri>
+      <static>true</static>
+    </include>
+
+  </world>
+</sdf>
